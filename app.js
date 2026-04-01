@@ -112,6 +112,12 @@ app.use((err, req, res, next)=>{
   let{message= "something went wrong", statusCode= 500} = err;
   res.status(statusCode).render("error.ejs",{message});
 })
-app.listen(8080, () =>{
-    console.log("Server is listening on port 8080");
+// Purane 'app.listen' ki jagah ye replace karein:
+const port = process.env.PORT || 8080;
+
+app.listen(port, () => {
+    console.log(`Server is listening on port ${port}`);
 });
+
+module.exports = app;
+
