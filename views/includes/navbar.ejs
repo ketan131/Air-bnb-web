@@ -36,16 +36,21 @@
           <button class="btn search-btn" type="submit"><i class="fa-solid fa-magnifying-glass"></i>Search</button>
         </form>
       </div>
-
-      <div class="navbar-nav ms-auto">
+        <!-- help with ai -->
+          <div class="navbar-nav ms-auto">
          <a class="nav-link" href="/listings/new">Airbnb your home</a>
-        <% if(!currentUser){ %>
-        <a class="nav-link "  href="/signup"><b>Sign up</b></a>
-        <a class="nav-link" href="/login"><b>Login in</b></a>
-        <% }  %> <% if(currentUser){ %>
-        <a class="nav-link" href="/logout"><b>Log out</b></a>
+        
+        <!-- Yahan dhyan dein, maine bas 'locals.' add kiya hai -->
+        <% if(!locals.currentUser){ %>
+          <a class="nav-link "  href="/signup"><b>Sign up</b></a>
+          <a class="nav-link" href="/login"><b>Login in</b></a>
+        <% } %> 
+        
+        <% if(locals.currentUser){ %>
+          <a class="nav-link" href="/logout"><b>Log out</b></a>
         <% } %>
       </div>
+   <!-- yha tk-->
     </div>
   </div>
 </nav>
