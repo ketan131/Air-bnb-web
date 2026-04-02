@@ -111,8 +111,8 @@ app.use("/", UserRouter);
 app.use((err, req, res, next)=>{
   let{message= "something went wrong", statusCode= 500} = err;
   res.status(statusCode).render("error.ejs",{message});
-})
-// Purane 'app.listen' ki jagah ye replace karein:
+});
+// Purane 'app.listen' ki jagah ye replace kara:
 const port = process.env.PORT || 8080;
 
 app.listen(port, () => {
