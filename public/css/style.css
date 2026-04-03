@@ -102,5 +102,40 @@ body{
     padding-left : 0;
     padding-right : 0;
  }
+/* ===== RESPONSIVE FIX ===== */
 
+/* Images responsive */
+.card img {
+  width: 100%;
+  height: 250px;   /* desktop */
+  object-fit: cover;
+}
 
+/* Mobile ke liye */
+@media (max-width: 768px) {
+  .card img {
+    height: 200px;
+  }
+
+  .listing-card {
+    margin-bottom: 1rem;
+  }
+
+  #filters {
+    overflow-x: auto;
+    flex-wrap: nowrap;
+  }
+
+  .filter {
+    min-width: 80px;
+  }
+}
+.listing-card {
+  transition: 0.3s;
+  border-radius: 10px;
+}
+
+.listing-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
