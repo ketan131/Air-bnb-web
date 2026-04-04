@@ -88,15 +88,42 @@
       </div>
     </div>
     <!-- Yahan tax-toggle wala div khatam ho raha hai -->
-    <!-- AB  KAREIN -->
-    <div class="price-filter-container d-flex justify-content-center my-4">
-      <form action="/listings/filter" method="GET" class="d-flex align-items-center gap-3 p-2 px-4 shadow-sm border rounded-pill bg-white">
-        <label for="priceRange" class="form-label mb-0"><b>Budget:</b> ₹<span id="priceValue">10,000</span></label>
-        <input type="range" class="form-range" name="price" min="500" max="25000" step="500" id="priceRange" value="10000" oninput="updatePriceLabel(this.value)" style="width: 150px;">
-        <button type="submit" class="btn btn-danger btn-sm rounded-pill px-3">Apply</button>
-        <a href="/listings" class="btn btn-outline-secondary btn-sm rounded-pill px-3 text-decoration-none">Reset</a>
-      </form>
+   <!-- Professional Price Filter UI -->
+<div class="container mb-4 mt-3">
+    <div class="row justify-content-center">
+        <div class="col-md-10 col-lg-8">
+            <div class="p-3 shadow-sm border rounded-pill bg-white d-flex align-items-center px-4" style="border-color: #ebebeb !important;">
+                
+                <form action="/listings/filter" method="GET" class="d-flex align-items-center gap-4 w-100 mb-0">
+                    <!-- Price Label aur Slider -->
+                    <div class="d-flex align-items-center flex-grow-1">
+                        <span class="text-secondary fw-bold me-3" style="white-space: nowrap; font-size: 0.9rem;">
+                            Budget: <span class="text-danger" id="priceValueText">₹10,000</span>
+                        </span>
+                        <!-- Custom Range Slider -->
+                        <input type="range" class="form-range" name="price" min="500" max="25000" step="500" id="priceRange" value="10000" 
+                               oninput="updatePriceUI(this.value)" style="accent-color: #fe424d; cursor: pointer;">
+                    </div>
+                    
+                    <!-- Buttons -->
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-danger rounded-pill px-4 btn-sm fw-bold shadow-sm" style="background-color: #fe424d; border: none;">Apply</button>
+                        <a href="/listings" class="btn btn-outline-secondary rounded-pill px-3 btn-sm text-decoration-none" style="font-size: 0.8rem;">Reset</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
     </div>
+</div>
+
+<script>
+  function updatePriceUI(val) {
+    // Number format (₹10,000) dikhane ke liye logic
+    document.getElementById('priceValueText').innerText = "₹" + Number(val).toLocaleString("en-IN");
+  }
+</script>
+
 
     <!-- Ye purani line hai jahan se cards shuru hote hain -->
     <div class="row  row-cols-lg-3 row-cols-md-2  row-cols-sm-1 mt-3">
@@ -175,11 +202,6 @@
     });
   });
 </script>
-<!-- Price Filter Functionality -->
-<script>
-  function updatePriceLabel(val) {
-    document.getElementById('priceValue').innerText = Number(val).toLocaleString("en-IN");
-  }
-</script>
+
 
  
