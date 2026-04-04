@@ -33,6 +33,23 @@ const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
   res.render("listings/index.ejs", { allListings });
 });
 /* yha tk */
+/* --- Naya Unique Feature: Price Filter --- */
+router.get("/filter", wrapAsync(async (req, res) => {
+  let { price } = req.query; // Slider se aayi value (e.g. 10000)
+  
+  // MongoDB Query: Price should be less than or equal to ($lte)
+  const allListings = await Listing.find({ price: { $lte: price } });
+
+  if (allListings.length === 0) {
+    req.flash("error", "Is budget mein koi property nahi mili!");
+    return res.redirect("/listings");
+  }
+
+  // Wahi index page render karenge par filtered results ke sath
+  res.render("listings/index.ejs", { allListings });
+}));
+/* --- End of Price Filter --- */
+
 //New route
 router.get("/new", isLoggedIn, listingcontrollers.renderNewForm);
 
