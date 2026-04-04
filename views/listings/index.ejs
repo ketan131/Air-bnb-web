@@ -34,17 +34,6 @@
     align-items: center;
   }
 </style>
-   <!-- search baar bnane k liye -->
-    <div class="search-box" style="margin: 1rem 0;">
-  <input 
-    type="text" 
-    id="searchInput" 
-    class="form-control" 
-    placeholder="Search listings..."
-  />
-  <ul id="suggestions" class="list-group"></ul>
-</div>
-<!-- yha tk design kiya -->
    <div id="filters">
       <div class="filter">
        <div><i class="fa-solid fa-fire"></i></div>
@@ -127,3 +116,27 @@
     }
   });
 </script>
+<script>
+  let searchInput = document.getElementById("searchInput");
+
+  let listings = <%- JSON.stringify(allListings || []) %>;
+
+  let index = 0;
+
+  function changePlaceholder() {
+    if (!searchInput || listings.length === 0) return;
+
+    let titles = listings.map(item => item.title);
+
+    searchInput.setAttribute(
+      "placeholder",
+      "Search " + titles[index]
+    );
+
+    index = (index + 1) % titles.length;
+  }
+
+  setInterval(changePlaceholder, 2000);
+</script>
+
+ 
