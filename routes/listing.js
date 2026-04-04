@@ -18,7 +18,21 @@ const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
   wrapAsync(
     listingcontrollers.createListing)
   );
+  /*y help of friend kiya h */
+  router.get("/search", async (req, res) => {
+  let { query } = req.query;
 
+  if (!query) {
+    return res.redirect("/listings");
+  }
+
+  let allListings = await Listing.find({
+    title: { $regex: query, $options: "i" }
+  });
+
+  res.render("listings/index.ejs", { allListings });
+});
+/* yha tk */
 //New route
 router.get("/new", isLoggedIn, listingcontrollers.renderNewForm);
 

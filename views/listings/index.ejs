@@ -35,47 +35,48 @@
   }
 </style>
    <div id="filters">
-      <div class="filter">
+    <!-- data category add kiya help leke -->
+      <div class="filter" data-category="trending">
        <div><i class="fa-solid fa-fire"></i></div>
         <p>Trending</p>
       </div>
-      <div class="filter">
+      <div class="filter" data-category="rooms">
        <div><i class="fa-solid fa-bed"></i></div>
         <p>Rooms</p>
       </div>
-       <div class="filter">
+      <div class="filter" data-category="cities">
        <div><i class="fa-solid fa-mountain-city"></i></div>
         <p>Iconic Cities</p>
       </div>
-      <div class="filter">
+      <div class="filter" data-category="mountain">
        <div><i class="fa-solid fa-mountain"></i></div>
         <p>Mountain</p>
       </div>
-       <div class="filter">
+       <div class="filter" data-category="castles">
        <div><i class="fa-brands fa-fort-awesome"></i></div>
         <p>Castles</p>
       </div>
-      <div class="filter">
+      <div class="filter" data-category="pools">
        <div><i class="fa-solid fa-person-swimming"></i></div>
         <p>Amazing Pool</p>
       </div>
-        <div class="filter">
+        <div class="filter" data-category="camping">
        <div><i class="fa-solid fa-campground"></i></div>
         <p>Camping</p>
       </div>
-       <div class="filter">
+       <div class="filter" data-category="farms">
        <div><i class="fa-solid fa-tractor"></i></div>
         <p>Farms</p>
       </div>
-      <div class="filter">
+      <div class="filter" data-category="arctic">
        <div><i class="fa-solid fa-snowflake"></i></div>
         <p>Arctic</p>
       </div>
-           <div class="filter">
+           <div class="filter" data-category="domes">
        <div><i class="fa-solid fa-igloo"></i></div>
         <p>Domes</p>
       </div>
-      <div class="filter">
+      <div class="filter" data-category="sailboats">
        <div><i class="fa-solid fa-sailboat"></i></div>
         <p>Sailboats</p>
       </div>
@@ -103,6 +104,7 @@
 </a>
   <% } %>
 </div>
+<!-- Tax Toggle Functionality -->
 <script>
   let taxSwitch = document.getElementById("flexSwitchCheckDefault");
   taxSwitch.addEventListener("click", ()=>{
@@ -116,6 +118,7 @@
     }
   });
 </script>
+<!-- search bar functionality -->
 <script>
   let searchInput = document.getElementById("searchInput");
 
@@ -130,7 +133,7 @@
 
     searchInput.setAttribute(
       "placeholder",
-      "Search " + titles[index]
+       titles[index]
     );
 
     index = (index + 1) % titles.length;
@@ -139,4 +142,25 @@
   setInterval(changePlaceholder, 2000);
 </script>
 
+<!-- Filter functionality -->
+<script>
+  let filters = document.querySelectorAll(".filter");
+  let cards = document.querySelectorAll(".listing-card");
+
+  filters.forEach(filter => {
+    filter.addEventListener("click", () => {
+      let category = filter.getAttribute("data-category");
+
+      cards.forEach(card => {
+        let text = card.innerText.toLowerCase();
+
+        if (text.includes(category)) {
+          card.style.display = "block";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  });
+</script>
  
