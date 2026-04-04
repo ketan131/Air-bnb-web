@@ -88,8 +88,6 @@
       </div>
     </div>
     <!-- Yahan tax-toggle wala div khatam ho raha hai -->
-   
-
     <!-- AB  KAREIN -->
     <div class="price-filter-container d-flex justify-content-center my-4">
       <form action="/listings/filter" method="GET" class="d-flex align-items-center gap-3 p-2 px-4 shadow-sm border rounded-pill bg-white">
@@ -100,9 +98,7 @@
       </form>
     </div>
 
-    <!-- Ye aapki purani line hai jahan se cards shuru hote hain -->
-   
-
+    <!-- Ye purani line hai jahan se cards shuru hote hain -->
     <div class="row  row-cols-lg-3 row-cols-md-2  row-cols-sm-1 mt-3">
     <% for(let listing of allListings) { %>
       <a href="/listings/<%= listing._id %>" class="listing-link">
