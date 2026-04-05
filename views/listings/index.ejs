@@ -131,7 +131,16 @@
       <a href="/listings/<%= listing._id %>" class="listing-link">
     <div class="card col listing-card" >
   <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" >
-  <div class="card-img-overlay"></div>
+  <div class="card-img-overlay d-flex justify-content-end align-items-start">
+    <!-- Heart Icon -->
+    <form action="/listings/<%= listing._id %>/wishlist" method="POST">
+        <button type="submit" style="background: none; border: none;">
+            <i class="fa-regular fa-heart fs-4 text-white" id="heart-<%= listing._id %>"></i>
+        </button>
+    </form>
+</div>
+
+ 
   <div class="card-body">
     <p class="card-text">
      <b><%= listing.title %></b><br />

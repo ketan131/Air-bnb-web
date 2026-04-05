@@ -3,6 +3,8 @@ const router =  express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
+const User = require("../models/user.js"); // Ye bhulna mat warna 'User is not defined' error aayega
+
  
  const listingcontrollers = require("../controllers/listings.js");
   const multer = require("multer");
@@ -49,7 +51,23 @@ router.get("/filter", wrapAsync(async (req, res) => {
   res.render("listings/index.ejs", { allListings });
 }));
 /* --- End of Price Filter --- */
+/*-- wishka route--*/
+// Wishlist Route
+router.post("/:id/wishlist", isLoggedIn, wrapAsync(async (req, res) => {
+    let { id } = req.params;
+    let user = await User.findById(req.user._id); // Current logged-in user
 
+    // Check karein ki kahin pehle se toh add nahi hai
+    if (!user.wishlist.includes(id)) {
+        user.wishlist.push(id);
+        await user.save();
+        req.flash("success", "Added to Wishlist!");
+    } else {
+        req.flash("error", "Already in Wishlist!");
+    }
+    res.redirect("/listings");
+}));
+/*-- yha tk --*/
 //New route
 router.get("/new", isLoggedIn, listingcontrollers.renderNewForm);
 
