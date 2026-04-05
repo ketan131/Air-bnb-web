@@ -126,27 +126,40 @@
 
 
     <!-- Ye purani line hai jahan se cards shuru hote hain -->
-  
-    <div class="card-body">
-  <div class="card-body-content">
-    <p class="card-text mb-0">
-      <b><%= listing.title %></b><br />
-      ₹ <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> /night
-      <i class="tax-info">&nbsp; &nbsp; +18% GST</i>
-    </p>
+      <!-- Ye rahi cards -->
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+      <% for(let listing of allListings) { %>
+        <a href="/listings/<%= listing._id %>" class="listing-link">
+          <div class="card col listing-card">
+            <!-- 1. Image -->
+            <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem; object-fit: cover;">
+            
+            <!-- 2. Card Body (Details + Heart Icon) -->
+            <div class="card-body">
+              <div class="d-flex justify-content-between align-items-center mt-2">
+                <p class="card-text mb-0">
+                  <b><%= listing.title %></b><br />
+                  ₹ <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> /night
+                  <i class="tax-info">&nbsp; &nbsp; +18% GST</i>
+                </p>
 
-    <!-- Wishlist Heart Icon -->
-    <form action="/listings/<%= listing._id %>/wishlist" method="POST">
-      <button type="submit" class="wishlist-btn">
-        <% if (currUser && currUser.wishlist && currUser.wishlist.includes(listing._id)) { %>
-            <i class="fa-solid fa-heart fs-4 wishlist-icon"></i>
-        <% } else { %>
-            <i class="fa-regular fa-heart fs-4 text-secondary wishlist-icon"></i>
-        <% } %>
-      </button>
-    </form>
-  </div>
-</div>
+                <!-- Wishlist Heart Icon -->
+                <form action="/listings/<%= listing._id %>/wishlist" method="POST">
+                  <button type="submit" style="background: none; border: none; outline: none; padding: 0;">
+                    <% if (currUser && currUser.wishlist && currUser.wishlist.includes(listing._id)) { %>
+                        <i class="fa-solid fa-heart fs-4" style="color: #fe424d;"></i>
+                    <% } else { %>
+                        <i class="fa-regular fa-heart fs-4 text-secondary"></i>
+                    <% } %>
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </a>
+      <% } %> <!-- Loop yahan khatam ho raha hai -->
+    </div>
+
 
 
 <!-- Tax Toggle Functionality -->
