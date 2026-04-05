@@ -189,4 +189,29 @@ body{
     opacity: 1 !important; /* Isse heart hamesha dikhega */
     background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, transparent 40%); /* Isse upar ka hissa halka dark dikhega taaki white heart saaf nazar aaye */
 }
+/* Wishlist Heart Styling */
+.wishlist-btn {
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+    transition: transform 0.2s ease;
+}
+
+.wishlist-btn:hover {
+    transform: scale(1.2);
+}
+
+.wishlist-icon {
+    color: #fe424d; /* Airbnb Red */
+    cursor: pointer;
+}
+
+/* Card Body Layout */
+.card-body-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
 

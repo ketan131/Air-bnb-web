@@ -126,32 +126,29 @@
 
 
     <!-- Ye purani line hai jahan se cards shuru hote hain -->
-    <div class="row  row-cols-lg-3 row-cols-md-2  row-cols-sm-1 mt-3">
-    <% for(let listing of allListings) { %>
-      <a href="/listings/<%= listing._id %>" class="listing-link">
-    <div class="card col listing-card" >
-  <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" >
-  <div class="card-img-overlay d-flex justify-content-end align-items-start">
-    <!-- Heart Icon -->
-    <form action="/listings/<%= listing._id %>/wishlist" method="POST">
-        <button type="submit" style="background: none; border: none;">
-            <i class="fa-regular fa-heart fs-4 text-white" id="heart-<%= listing._id %>"></i>
-        </button>
-    </form>
-</div>
-
- 
-  <div class="card-body">
-    <p class="card-text">
-     <b><%= listing.title %></b><br />
-     &#8377; <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %>  /night
-     <i class="tax-info" >&nbsp; &nbsp; +18% GST</i>
+  
+    <div class="card-body">
+  <div class="card-body-content">
+    <p class="card-text mb-0">
+      <b><%= listing.title %></b><br />
+      ₹ <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> /night
+      <i class="tax-info">&nbsp; &nbsp; +18% GST</i>
     </p>
+
+    <!-- Wishlist Heart Icon -->
+    <form action="/listings/<%= listing._id %>/wishlist" method="POST">
+      <button type="submit" class="wishlist-btn">
+        <% if (currUser && currUser.wishlist && currUser.wishlist.includes(listing._id)) { %>
+            <i class="fa-solid fa-heart fs-4 wishlist-icon"></i>
+        <% } else { %>
+            <i class="fa-regular fa-heart fs-4 text-secondary wishlist-icon"></i>
+        <% } %>
+      </button>
+    </form>
   </div>
 </div>
-</a>
-  <% } %>
-</div>
+
+
 <!-- Tax Toggle Functionality -->
 <script>
   let taxSwitch = document.getElementById("flexSwitchCheckDefault");
