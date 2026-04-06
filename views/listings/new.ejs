@@ -16,6 +16,24 @@
     <textarea name="listing[description]" class="form-control" required></textarea>
     <div class="invalid-feedback">please enter a short description </div>
      </div>
+     <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select name="listing[category]" class="form-select" required>
+            <option value="" selected disabled>Select category</option>
+            <option value="trending">Trending</option>
+            <option value="rooms">Rooms</option>
+            <option value="cities">Iconic Cities</option>
+            <option value="mountain">Mountain</option>
+            <option value="castles">Castles</option>
+            <option value="pools">Amazing Pool</option>
+            <option value="camping">Camping</option>
+            <option value="farms">Farms</option>
+            <option value="arctic">Arctic</option>
+            <option value="domes">Domes</option>
+            <option value="sailboats">Sailboats</option>
+        </select>
+        <div class="invalid-feedback">Please select a category</div>
+     </div>
     <div class="row">
     <div class="mb-3 col-md-4">
         <label for="price" class="form-label">Price</label>

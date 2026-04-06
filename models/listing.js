@@ -6,6 +6,24 @@ const listingSchema = new Schema({
   title: { type: String },
   description: String,
   price: Number,
+  // Added with AI assistance: category used by UI filters (Trending/Rooms/Pools etc.)
+  category: {
+    type: String,
+    enum: [
+      "trending",
+      "rooms",
+      "cities",
+      "mountain",
+      "castles",
+      "pools",
+      "camping",
+      "farms",
+      "arctic",
+      "domes",
+      "sailboats",
+    ],
+    default: "trending",
+  },
   location: String,
   country: String,
   reviews: [

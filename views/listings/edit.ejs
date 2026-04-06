@@ -14,6 +14,23 @@
         <textarea name="listing[description]" class="form-control" required><%= listing.description %></textarea>
         <div class="invalid-feedback">please enter a short description </div>
         </div>
+        <div class="mb-3">
+        <label for="category" class="form-label">Category</label>
+        <select name="listing[category]" class="form-select" required>
+            <option value="trending" <%= listing.category === "trending" ? "selected" : "" %>>Trending</option>
+            <option value="rooms" <%= listing.category === "rooms" ? "selected" : "" %>>Rooms</option>
+            <option value="cities" <%= listing.category === "cities" ? "selected" : "" %>>Iconic Cities</option>
+            <option value="mountain" <%= listing.category === "mountain" ? "selected" : "" %>>Mountain</option>
+            <option value="castles" <%= listing.category === "castles" ? "selected" : "" %>>Castles</option>
+            <option value="pools" <%= listing.category === "pools" ? "selected" : "" %>>Amazing Pool</option>
+            <option value="camping" <%= listing.category === "camping" ? "selected" : "" %>>Camping</option>
+            <option value="farms" <%= listing.category === "farms" ? "selected" : "" %>>Farms</option>
+            <option value="arctic" <%= listing.category === "arctic" ? "selected" : "" %>>Arctic</option>
+            <option value="domes" <%= listing.category === "domes" ? "selected" : "" %>>Domes</option>
+            <option value="sailboats" <%= listing.category === "sailboats" ? "selected" : "" %>>Sailboats</option>
+        </select>
+        <div class="invalid-feedback">Please select a category</div>
+        </div>
         <div class="row">
         <div class="mb-3 col-md-4">
         <label for="price" class="form-label">Price</label>
