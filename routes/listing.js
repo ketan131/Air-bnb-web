@@ -4,6 +4,7 @@ const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 const User = require("../models/user.js"); // Ye bhulna mat warna 'User is not defined' error aayega
+const { generateAIReview } = require("../services/aiAnalysis.js");
 
  
  const listingcontrollers = require("../controllers/listings.js");
@@ -81,6 +82,24 @@ router.route("/:id")
 
 //Edit route
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingcontrollers.renderEditForm));
+
+// AI Review route for listing details page
+router.get("/:id/ai-review", wrapAsync(async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id);
+
+  if (!listing) {
+    return res.status(404).json({ error: "Listing not found" });
+  }
+
+  try {
+    const aiReview = await generateAIReview(listing);
+    res.json(aiReview);
+  } catch (err) {
+    console.log("AI Review generation failed:", err.message);
+    res.status(500).json({ error: "AI review generation failed" });
+  }
+}));
 
 
 

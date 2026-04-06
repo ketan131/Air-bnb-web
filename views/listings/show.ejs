@@ -15,6 +15,22 @@
         </div>
     </div>
 
+    <div class="card col-6 offset-3 mt-3">
+        <div class="card-body">
+            <h5 class="card-title mb-3">AI Review</h5>
+            <p id="ai-loading" class="card-text text-muted">AI analysis load ho raha hai...</p>
+            <p id="ai-error" class="card-text text-danger d-none">AI review abhi available nahi hai.</p>
+            <div id="ai-content" class="d-none">
+                <p class="card-text mb-1"><strong>Value for Money:</strong> <span id="ai-value-label"></span></p>
+                <p class="card-text text-muted" id="ai-value-reason"></p>
+                <p class="card-text mb-1"><strong>Location:</strong> <span id="ai-location-label"></span></p>
+                <p class="card-text text-muted" id="ai-location-reason"></p>
+                <p class="card-text mb-1"><strong>Property Features:</strong></p>
+                <ul id="ai-features" class="mb-0"></ul>
+            </div>
+        </div>
+    </div>
+
     <% if(currentUser && listing.owner._id.equals(currentUser._id)) { %>
     <div class="btns">
         <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
@@ -71,3 +87,37 @@
             <% } %>
     </div>
 </div>
+
+<script>
+    (async function () {
+        const listingId = "<%= listing._id %>";
+        const loadingEl = document.getElementById("ai-loading");
+        const errorEl = document.getElementById("ai-error");
+        const contentEl = document.getElementById("ai-content");
+
+        try {
+            const res = await fetch(`/listings/${listingId}/ai-review`);
+            if (!res.ok) throw new Error("Request failed");
+            const data = await res.json();
+
+            document.getElementById("ai-value-label").textContent = data.valueForMoney?.label || "N/A";
+            document.getElementById("ai-value-reason").textContent = data.valueForMoney?.reason || "";
+            document.getElementById("ai-location-label").textContent = data.location?.label || "N/A";
+            document.getElementById("ai-location-reason").textContent = data.location?.reason || "";
+
+            const featureList = document.getElementById("ai-features");
+            featureList.innerHTML = "";
+            (data.features || []).forEach((feature) => {
+                const li = document.createElement("li");
+                li.textContent = feature;
+                featureList.appendChild(li);
+            });
+
+            loadingEl.classList.add("d-none");
+            contentEl.classList.remove("d-none");
+        } catch (err) {
+            loadingEl.classList.add("d-none");
+            errorEl.classList.remove("d-none");
+        }
+    })();
+</script>
