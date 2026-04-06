@@ -1,4 +1,5 @@
 const axios = require("axios");
+// Added with AI assistance: This service generates listing AI Review (Gemini + fallback).
 
 function safeNumber(value) {
   const n = Number(value);
@@ -80,6 +81,7 @@ function tryParseJson(text) {
 
 async function generateAIReview(listing) {
   const apiKey = process.env.GEMINI_API_KEY;
+  // If API key is missing, keep feature working using rule-based fallback.
   if (!apiKey) return fallbackAnalysis(listing);
 
   const prompt = `

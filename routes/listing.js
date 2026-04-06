@@ -5,6 +5,7 @@ const Listing = require("../models/listing.js");
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 const User = require("../models/user.js"); // Ye bhulna mat warna 'User is not defined' error aayega
 const { generateAIReview } = require("../services/aiAnalysis.js");
+// Added with AI assistance: AI review API and wishlist toggle logic.
 
  
  const listingcontrollers = require("../controllers/listings.js");
@@ -58,15 +59,21 @@ router.post("/:id/wishlist", isLoggedIn, wrapAsync(async (req, res) => {
     let { id } = req.params;
     let user = await User.findById(req.user._id); // Current logged-in user
 
-    // Check karein ki kahin pehle se toh add nahi hai
-    if (!user.wishlist.includes(id)) {
+    // Toggle behavior: second click removes listing from wishlist (unlike support).
+    const alreadyWishlisted = user.wishlist.some((wishId) => wishId.toString() === id.toString());
+
+    if (alreadyWishlisted) {
+        user.wishlist = user.wishlist.filter((wishId) => wishId.toString() !== id.toString());
+        await user.save();
+        req.flash("success", "Removed from Wishlist!");
+    } else {
         user.wishlist.push(id);
         await user.save();
         req.flash("success", "Added to Wishlist!");
-    } else {
-        req.flash("error", "Already in Wishlist!");
     }
-    res.redirect("/listings");
+
+    const redirectTo = req.get("referer") || "/listings";
+    res.redirect(redirectTo);
 }));
 /*-- yha tk --*/
 //New route
