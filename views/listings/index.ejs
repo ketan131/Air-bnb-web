@@ -1,5 +1,6 @@
 <% layout('layouts/boilerplate') %>
 <style>
+  /* NEW: Explore page polish styles (clean spacing + active filter) */
   #filters{
     display: flex;
     flex-wrap: nowrap;
@@ -7,19 +8,27 @@
     overflow-y: hidden;
     align-items: center;
     gap: 1rem;
+    margin-top: 0.75rem;
   }
   .filter{
     text-align: center;
-    margin-right: 2rem;
-    margin-top: 2rem;
+    margin-right: 1.4rem;
+    margin-top: 1.2rem;
     opacity: 0.7;
+    transition: all 0.2s ease;
   }
   .filter:hover{
     opacity:1;
     cursor: pointer;
+    transform: translateY(-1px);
   }
   .filter{
     font-size: 0.8rem;
+  }
+  .filter.active-filter{
+    opacity: 1;
+    color: #fe424d;
+    font-weight: 600;
   }
   #tax-info{
     display: none;
@@ -32,6 +41,31 @@
     margin-left: 2rem;
     display: flex;
     align-items: center;
+  }
+  /* NEW: Better card spacing and layout consistency */
+  .listing-item{
+    margin-bottom: 1.2rem;
+  }
+  .listing-card{
+    border-radius: 14px;
+    overflow: hidden;
+  }
+  .listing-price-line{
+    line-height: 1.4;
+  }
+  .wishlist-btn-clean{
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0;
+  }
+  /* NEW: No result message for category filter */
+  #noFilterResult{
+    display: none;
+    text-align: center;
+    color: #6c757d;
+    font-weight: 500;
+    padding: 0.8rem;
   }
 </style>
    <div id="filters">
@@ -131,10 +165,10 @@
 
     <!-- Ye purani line hai jahan se cards shuru hote hain -->
       <!-- Ye rahi cards -->
-    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3">
+    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 mt-3" id="listingGrid">
       <% for(let listing of allListings) { %>
-        <a href="/listings/<%= listing._id %>" class="listing-link">
-          <div class="card col listing-card" data-category="<%= listing.category || 'trending' %>">
+        <a href="/listings/<%= listing._id %>" class="listing-link col listing-item" data-category="<%= listing.category || 'trending' %>">
+          <div class="card listing-card">
             <!-- 1. Image -->
             <img src="<%= listing.image.url %>" class="card-img-top" alt="listing_image" style="height: 20rem; object-fit: cover;">
             
@@ -143,13 +177,13 @@
               <div class="d-flex justify-content-between align-items-center mt-2">
                 <p class="card-text mb-0">
                   <b><%= listing.title %></b><br />
-                  ₹ <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> /night
+                  <span class="listing-price-line">₹ <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> /night</span>
                   <i class="tax-info">&nbsp; &nbsp; +18% GST</i>
                 </p>
 
                 <!-- Wishlist Heart Icon -->
                 <form action="/listings/<%= listing._id %>/wishlist" method="POST">
-                  <button type="submit" style="background: none; border: none; outline: none; padding: 0;">
+                  <button type="submit" class="wishlist-btn-clean">
                     <% if (currentUser && currentUser.wishlist && currentUser.wishlist.includes(listing._id)) { %>
                         <i class="fa-solid fa-heart fs-4" style="color: #fe424d;"></i>
                     <% } else { %>
@@ -163,6 +197,7 @@
         </a>
       <% } %> <!-- Loop yahan khatam ho raha hai -->
     </div>
+    <div id="noFilterResult">No listings found for this filter.</div>
 
 
 
@@ -180,11 +215,19 @@
     }
   });
 </script>
+<!-- NEW: pass listing titles safely for rotating search placeholder -->
+<div id="listingData" data-listings="<%- encodeURIComponent(JSON.stringify(allListings || [])) %>"></div>
+
 <!-- search bar functionality -->
 <script>
   let searchInput = document.getElementById("searchInput");
-
-  let listings = <%- JSON.stringify(allListings || []) %>;
+  let listingsDataEl = document.getElementById("listingData");
+  let listings = [];
+  try {
+    listings = JSON.parse(decodeURIComponent(listingsDataEl?.dataset?.listings || "%5B%5D"));
+  } catch (e) {
+    listings = [];
+  }
 
   let index = 0;
 
@@ -207,20 +250,30 @@
 <!-- Filter functionality -->
 <script>
   let filters = document.querySelectorAll(".filter");
-  let cards = document.querySelectorAll(".listing-card");
+  let items = document.querySelectorAll(".listing-item");
+  // NEW: Show a message when selected category has zero items.
+  let noFilterResult = document.getElementById("noFilterResult");
 
   filters.forEach(filter => {
     filter.addEventListener("click", () => {
       let category = filter.getAttribute("data-category");
+      let visibleCount = 0;
 
-      cards.forEach(card => {
-        let cardCategory = (card.getAttribute("data-category") || "").toLowerCase();
-        if (category === "all" || cardCategory === category) {
-          card.style.display = "block";
+      // NEW: Active filter state for better UI feedback.
+      filters.forEach(f => f.classList.remove("active-filter"));
+      filter.classList.add("active-filter");
+
+      items.forEach(item => {
+        let itemCategory = (item.getAttribute("data-category") || "").toLowerCase();
+        if (category === "all" || itemCategory === category) {
+          item.style.display = "block";
+          visibleCount++;
         } else {
-          card.style.display = "none";
+          item.style.display = "none";
         }
       });
+
+      noFilterResult.style.display = visibleCount === 0 ? "block" : "none";
     });
   });
 </script>

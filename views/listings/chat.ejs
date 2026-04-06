@@ -1,0 +1,104 @@
+<% layout('layouts/boilerplate') %>
+
+<style>
+  /* NEW: Chat room styling */
+  .chat-wrap { max-width: 820px; margin: 1rem auto 2rem; }
+  .chat-box {
+    border: 1px solid #e9ecef;
+    border-radius: 14px;
+    padding: 1rem;
+    background: #fff;
+    height: 60vh;
+    overflow-y: auto;
+  }
+  .msg-row { margin-bottom: 0.75rem; display: flex; }
+  .msg-row.me { justify-content: flex-end; }
+  .msg-bubble {
+    max-width: 75%;
+    border-radius: 12px;
+    padding: 0.55rem 0.8rem;
+    background: #f1f3f5;
+  }
+  .msg-row.me .msg-bubble { background: #ffe8ea; }
+  .msg-meta { font-size: 0.75rem; color: #6c757d; margin-top: 0.15rem; }
+</style>
+
+<div class="chat-wrap">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h4 class="mb-0">Chat with <%= listing.owner.username %></h4>
+      <small class="text-muted">Listing: <%= listing.title %></small>
+    </div>
+    <a href="/listings/<%= listing._id %>" class="btn btn-outline-secondary btn-sm">Back to Listing</a>
+  </div>
+
+  <div id="chatBox" class="chat-box mb-3">
+    <% for (let m of messages) { %>
+      <% const isMe = currentUser && m.sender && String(m.sender._id) === String(currentUser._id); %>
+      <% const role = String(m.sender._id) === String(listing.owner._id) ? "Host" : "User"; %>
+      <div class="msg-row <%= isMe ? 'me' : '' %>">
+        <div class="msg-bubble">
+          <div><%= m.text %></div>
+          <div class="msg-meta">
+            <%= m.sender.username %> (<%= role %>) - <%= new Date(m.createdAt).toLocaleString("en-IN") %>
+          </div>
+        </div>
+      </div>
+    <% } %>
+  </div>
+
+  <form id="chatForm" class="d-flex gap-2">
+    <input id="chatInput" class="form-control" maxlength="500" placeholder="Type your message..." required />
+    <button class="btn btn-danger" type="submit">Send</button>
+  </form>
+</div>
+
+<!-- NEW: Socket.IO client for real-time message updates -->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  const listingId = "<%= listing._id %>";
+  const currentUserId = "<%= currentUser ? currentUser._id : '' %>";
+  const chatBox = document.getElementById("chatBox");
+  const chatForm = document.getElementById("chatForm");
+  const chatInput = document.getElementById("chatInput");
+
+  const socket = io();
+  socket.emit("listing:join", { listingId });
+
+  function appendMessage(payload) {
+    const isMe = payload.sender && payload.sender._id && String(payload.sender._id) === String(currentUserId);
+    const row = document.createElement("div");
+    row.className = `msg-row ${isMe ? "me" : ""}`;
+    row.innerHTML = `
+      <div class="msg-bubble">
+        <div>${payload.text}</div>
+        <div class="msg-meta">${payload.sender.username} (${payload.role}) - ${new Date(payload.createdAt).toLocaleString("en-IN")}</div>
+      </div>
+    `;
+    chatBox.appendChild(row);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  socket.on("listing:new-message", (payload) => {
+    if (String(payload.listingId) !== String(listingId)) return;
+    appendMessage(payload);
+  });
+
+  chatForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const text = chatInput.value.trim();
+    if (!text) return;
+
+    const res = await fetch(`/listings/${listingId}/chat/messages`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+
+    if (!res.ok) return;
+    chatInput.value = "";
+  });
+
+  chatBox.scrollTop = chatBox.scrollHeight;
+</script>
+

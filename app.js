@@ -4,6 +4,8 @@ if (process.env.NODE_ENV !== "production") {
 console.log(process.env.SECRET);
 const express = require("express");
 const app = express();
+const http = require("http");
+const { Server } = require("socket.io");
 const mongoose =  require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
@@ -115,7 +117,19 @@ app.use((err, req, res, next)=>{
 // Purane 'app.listen' ki jagah ye replace kara:
 const port = process.env.PORT || 8080;
 
-app.listen(port, () => {
+// NEW: Socket.io setup for real-time listing chat
+const server = http.createServer(app);
+const io = new Server(server);
+app.set("io", io);
+
+io.on("connection", (socket) => {
+  socket.on("listing:join", ({ listingId }) => {
+    if (!listingId) return;
+    socket.join(`listing:${listingId}`);
+  });
+});
+
+server.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
 

@@ -2,6 +2,7 @@ const express = require("express");
 const router =  express.Router();
 const wrapAsync = require("../utils/wrapAsync.js");
 const Listing = require("../models/listing.js");
+const Message = require("../models/message.js");
 const { isLoggedIn, isOwner, validateListing } = require("../middleware.js");
 const User = require("../models/user.js"); // Ye bhulna mat warna 'User is not defined' error aayega
 const { generateAIReview } = require("../services/aiAnalysis.js");
@@ -89,6 +90,62 @@ router.route("/:id")
 
 //Edit route
 router.get("/:id/edit", isLoggedIn, isOwner, wrapAsync(listingcontrollers.renderEditForm));
+
+// NEW: Chat room page for logged-in users (User <-> Host)
+router.get("/:id/chat", isLoggedIn, wrapAsync(async (req, res) => {
+  const { id } = req.params;
+  const listing = await Listing.findById(id).populate("owner");
+  if (!listing) {
+    req.flash("error", "Listing not found!");
+    return res.redirect("/listings");
+  }
+
+  const messages = await Message.find({ listing: id })
+    .populate("sender", "username")
+    .sort({ createdAt: 1 });
+
+  res.render("listings/chat.ejs", { listing, messages });
+}));
+
+// NEW: Save chat message then broadcast in room
+router.post("/:id/chat/messages", isLoggedIn, wrapAsync(async (req, res) => {
+  const { id } = req.params;
+  const text = (req.body.text || "").trim();
+  if (!text) {
+    return res.status(400).json({ error: "Message text is required" });
+  }
+
+  const listing = await Listing.findById(id).populate("owner");
+  if (!listing) {
+    return res.status(404).json({ error: "Listing not found" });
+  }
+
+  const saved = await Message.create({
+    listing: id,
+    sender: req.user._id,
+    text,
+  });
+  await saved.populate("sender", "username");
+
+  const payload = {
+    _id: saved._id,
+    listingId: id,
+    text: saved.text,
+    createdAt: saved.createdAt,
+    sender: {
+      _id: saved.sender._id,
+      username: saved.sender.username,
+    },
+    role: listing.owner && listing.owner._id.equals(saved.sender._id) ? "Host" : "User",
+  };
+
+  const io = req.app.get("io");
+  if (io) {
+    io.to(`listing:${id}`).emit("listing:new-message", payload);
+  }
+
+  res.status(201).json(payload);
+}));
 
 // AI Review route for listing details page
 router.get("/:id/ai-review", wrapAsync(async (req, res) => {
