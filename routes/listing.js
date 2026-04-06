@@ -99,6 +99,11 @@ router.get("/:id/chat", isLoggedIn, wrapAsync(async (req, res) => {
     req.flash("error", "Listing not found!");
     return res.redirect("/listings");
   }
+  // NEW: Guard for old/seed listings that do not have an owner assigned.
+  if (!listing.owner) {
+    req.flash("error", "Chat unavailable for this listing (owner missing).");
+    return res.redirect(`/listings/${id}`);
+  }
 
   const messages = await Message.find({ listing: id })
     .populate("sender", "username")

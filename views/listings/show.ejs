@@ -15,7 +15,8 @@
     <div class="card col-6 offset-3 show-card lisitng-card show-main-card">
         <img src="<%= listing.image.url %>" class="card-img-top show-img" alt="listing image">
         <div class="card-body">
-            <p class="card-text">Owned by <i><%= listing.owner.username %></i></p>
+            <% const ownerName = listing.owner && listing.owner.username ? listing.owner.username : "WanderLust Host"; %>
+            <p class="card-text">Owned by <i><%= ownerName %></i></p>
             <p class="card-text"><%= listing.description %></p>
             <p class="card-text"><span class="meta-pill">₹ <%= listing.price ? listing.price.toLocaleString("en-IN") : "N/A" %> / night</span></p>
             <p class="card-text"><span class="meta-pill"><%= listing.location %></span> <span class="meta-pill"><%= listing.country %></span></p>
@@ -39,7 +40,7 @@
         </div>
     </div>
 
-    <% if(currentUser && listing.owner._id.equals(currentUser._id)) { %>
+    <% if(currentUser && listing.owner && listing.owner._id && listing.owner._id.equals(currentUser._id)) { %>
     <div class="btns">
         <a href="/listings/<%= listing._id %>/edit" class="btn btn-dark col-1 offset-3 edit-btn">Edit</a>
         <form method="POST" action="/listings/<%=listing._id%>?_method=DELETE">
@@ -48,7 +49,7 @@
     </div>
     <% } %>
     
-    <% if(currentUser) { %>
+    <% if(currentUser && listing.owner) { %>
     <!-- NEW: Direct chat entry for user-host communication -->
     <div class="col-6 offset-3 mt-2">
         <a href="/listings/<%= listing._id %>/chat" class="btn btn-outline-danger">Chat with Host</a>
