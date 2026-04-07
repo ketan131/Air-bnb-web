@@ -1,32 +1,33 @@
-# 🏠 Airbnb Clone Web App
+# 🏠 WanderLust - Airbnb Clone
 
-Welcome to the **Airbnb Clone** project! This is a modern, fully responsive web application built to replicate the core experience of browsing property listings. 
+A full-stack Airbnb clone built with Node.js, Express, MongoDB and EJS.
 
 ## 🚀 Live Demo
-Experience the live project here:  
-👉 **[https://vercel.app](https://vercel.app)**
-
----
+👉 **[https://air-bnb-web-y2w8.onrender.com](https://air-bnb-web-y2w8.onrender.com)**
 
 ## ✨ Features
-- **🏡 Dynamic Listings:** Browse a wide variety of properties with beautiful imagery.
-- **📱 Fully Responsive:** Seamless experience across Mobile, Tablet, and Desktop devices.
-- **⚡ Fast Loading:** Optimized frontend performance for quick navigation.
-- **🎨 Modern UI/UX:** Clean, minimalist design inspired by the official Airbnb interface.
-- **🔗 Direct Navigation:** Easy access to different property categories.
+- 🔐 User Authentication (Login/Signup)
+- 🏡 Property Listings (Create, Read, Update, Delete)
+- 📸 Image Upload via Cloudinary
+- ⭐ Reviews & Star Ratings
+- ❤️ Wishlist Feature
+- 💬 Real-time Chat (Host & Guest)
+- 🤖 AI Review Analysis (Gemini API)
+- 🔍 Search & Category Filters
+- 💰 Price Range Filter
+- 📱 Fully Responsive Design
 
 ## 🛠️ Tech Stack
-This project is built using the following technologies:
-- **Frontend:** [React.js](https://reactjs.org) / JavaScript (ES6+)
-- **Styling:** CSS3 / [Tailwind CSS](https://tailwindcss.com)
-- **Deployment:** [Vercel](https://vercel.com)
-- **Version Control:** Git & GitHub
+- **Backend:** Node.js, Express.js
+- **Database:** MongoDB, Mongoose
+- **Frontend:** EJS, Bootstrap 5
+- **Authentication:** Passport.js
+- **File Upload:** Multer + Cloudinary
+- **Real-time:** Socket.io
+- **Validation:** Joi
 
----
-
-## ⚙️ Installation & Setup
-To run this project locally on your machine, follow these steps:
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com
+## ⚙️ Setup
+1. Clone the repo
+2. Run `npm install`
+3. Create `.env` file
+4. Run `node app.js`
