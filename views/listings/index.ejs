@@ -184,11 +184,11 @@
                 <!-- Wishlist Heart Icon -->
                 <form action="/listings/<%= listing._id %>/wishlist" method="POST">
                   <button type="submit" class="wishlist-btn-clean">
-                    <% if (currentUser && currentUser.wishlist && currentUser.wishlist.includes(listing._id)) { %>
-                        <i class="fa-solid fa-heart fs-4" style="color: #fe424d;"></i>
-                    <% } else { %>
-                        <i class="fa-regular fa-heart fs-4 text-secondary"></i>
-                    <% } %>
+                    <% if (currUser && currUser.wishlist && currUser.wishlist.includes(listing._id)) { %>
+  <i class="fa-solid fa-heart" style="color:#fe424d;"></i>
+<% } else { %>
+  <i class="fa-regular fa-heart"></i>
+<% } %>
                   </button>
                 </form>
               </div>
