@@ -41,14 +41,14 @@
          <a class="nav-link" href="/listings/new">Airbnb your home</a>
         
         <!-- Yahan dhyan dein, maine bas 'locals.' add kiya hai -->
-        <% if(!locals.currUser){ %>
-          <a class="nav-link "  href="/signup"><b>Sign up</b></a>
-          <a class="nav-link" href="/login"><b>Login in</b></a>
-        <% } %> 
-        
-        <% if(locals.currUser){ %>
-          <a class="nav-link" href="/logout"><b>Log out</b></a>
-        <% } %>
+        <% if(!currUser){ %>
+  <a class="nav-link" href="/signup"><b>Sign up</b></a>
+  <a class="nav-link" href="/login"><b>Login in</b></a>
+<% } %> 
+
+<% if(currUser){ %>
+  <a class="nav-link" href="/logout"><b>Log out</b></a>
+<% } %>
       </div>
    <!-- yha tk-->
     </div>
