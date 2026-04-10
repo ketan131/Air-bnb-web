@@ -129,6 +129,21 @@ io.on("connection", (socket) => {
   });
 });
 
+
+// TEMPORARY - delete after first deploy
+const Listing = require("./models/listing");
+const initData = require("./init/data");
+const initDB = async () => {
+    await Listing.deleteMany({});
+    initData.data = initData.data.map((obj) => ({
+        ...obj,
+        owner: '69d88f2f2d54a53e13ecfb28'
+    }));
+    await Listing.insertMany(initData.data);
+    console.log("DB initialized!");
+};
+initDB();
+
 server.listen(port, () => {
     console.log(`Server is listening on port ${port}`);
 });
