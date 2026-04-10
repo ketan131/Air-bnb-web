@@ -247,26 +247,27 @@
   setInterval(changePlaceholder, 2000);
 </script>
 
-<!-- Filter functionality -->
+
+<!-- Filter functionality - FIXED -->
 <script>
   let filters = document.querySelectorAll(".filter");
   let items = document.querySelectorAll(".listing-item");
-  // NEW: Show a message when selected category has zero items.
   let noFilterResult = document.getElementById("noFilterResult");
 
   filters.forEach(filter => {
     filter.addEventListener("click", () => {
-      let category = filter.getAttribute("data-category");
+      let category = filter.getAttribute("data-category").toLowerCase().trim();
       let visibleCount = 0;
 
-      // NEW: Active filter state for better UI feedback.
       filters.forEach(f => f.classList.remove("active-filter"));
       filter.classList.add("active-filter");
 
       items.forEach(item => {
-        let itemCategory = (item.getAttribute("data-category") || "").toLowerCase();
+        // FIX 1: trim + lowercase dono side
+        let itemCategory = (item.getAttribute("data-category") || "").toLowerCase().trim();
+        
         if (category === "all" || itemCategory === category) {
-          item.style.display = "block";
+          item.style.display = ""; // FIX 2: "block" ki jagah "" use karo
           visibleCount++;
         } else {
           item.style.display = "none";
