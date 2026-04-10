@@ -34,7 +34,7 @@
 
   <div id="chatBox" class="chat-box mb-3">
     <% for (let m of messages) { %>
-      <% const isMe = currentUser && m.sender && String(m.sender._id) === String(currentUser._id); %>
+      <% const isMe = currUser && m.sender && String(m.sender._id) === String(currUser._id); %>
       <% const role = String(m.sender._id) === String(listing.owner._id) ? "Host" : "User"; %>
       <div class="msg-row <%= isMe ? 'me' : '' %>">
         <div class="msg-bubble">
@@ -57,7 +57,7 @@
 <script src="/socket.io/socket.io.js"></script>
 <script>
   const listingId = "<%= listing._id %>";
-  const currentUserId = "<%= currentUser ? currentUser._id : '' %>";
+  const currUserId = "<%= currUser ? currUser._id : '' %>";
   const chatBox = document.getElementById("chatBox");
   const chatForm = document.getElementById("chatForm");
   const chatInput = document.getElementById("chatInput");
@@ -66,7 +66,7 @@
   socket.emit("listing:join", { listingId });
 
   function appendMessage(payload) {
-    const isMe = payload.sender && payload.sender._id && String(payload.sender._id) === String(currentUserId);
+    const isMe = payload.sender && payload.sender._id && String(payload.sender._id) === String(currUserId);
     const row = document.createElement("div");
     row.className = `msg-row ${isMe ? "me" : ""}`;
     row.innerHTML = `

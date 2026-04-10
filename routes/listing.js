@@ -58,7 +58,7 @@ router.get("/filter", wrapAsync(async (req, res) => {
 // Wishlist Route
 router.post("/:id/wishlist", isLoggedIn, wrapAsync(async (req, res) => {
     let { id } = req.params;
-    let user = await User.findById(req.user._id); // Current logged-in user
+    let user = await User.findById(req.user._id); // Curr logged-in user
 
     // Toggle behavior: second click removes listing from wishlist (unlike support).
     const alreadyWishlisted = user.wishlist.some((wishId) => wishId.toString() === id.toString());

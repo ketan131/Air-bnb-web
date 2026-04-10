@@ -28,6 +28,7 @@ const dbUrl = process.env.ATLASDB_URL;
 main()
    .then(()=>{
     console.log("connected to DB");
+    console.log(mongoose.connection.name);
    })
    .catch((err)=>{
     console.log(err);
